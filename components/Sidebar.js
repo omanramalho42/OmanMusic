@@ -5,8 +5,10 @@ import {
   PlusCircleIcon,
   HeartIcon,
   RssIcon,
-
+  LogoutIcon,
 } from '@heroicons/react/outline'
+
+import { signOut, useSession } from 'next-auth/react'
 
 const Separator = () => {
   return (
@@ -17,6 +19,7 @@ const Separator = () => {
 const Sidebar = () => {
 
   const menuOptions = [
+    { title: 'Sair', icon: <LogoutIcon /> },
     { title: 'Home', icon: <HomeIcon /> },
     { title: 'Procure', icon: <SearchIcon /> },
     { title: 'Sua biblioteca', icon: <LibraryIcon /> },
@@ -25,18 +28,35 @@ const Sidebar = () => {
     { title: 'Suas músicas', icon: <RssIcon /> },
   ];
   
+  const { data: session, status } = useSession()
+  console.log(session, 'session')
+
   return (
     <div className='text-gray-500 p-5 text-sm border-r border-gray-900'>
       <div className='space-y-4'>
-        {menuOptions.map(({ title, icon }, index) => (
+        {menuOptions.map(({ title, icon }, index) => title != 'Sair' ? (
           <div key={index}>
-            <button className='flex items-center space-x-2 hover:text-white m-4'>
+            <button 
+              className='flex items-center space-x-2 hover:text-white m-4'
+            >
               <div className='h-5 w-5'>
                 { icon }
               </div>
               <p> { title } </p>
             </button>
-            {++index % 3 == 0 && ( <Separator /> )}
+            {++index % 4 == 0 && ( <Separator /> )}
+          </div>
+        ) : (
+          <div key={index}>
+            <button 
+              className='flex items-center space-x-2 hover:text-white m-4'
+              onClick={() => signOut()}
+            >
+              <div className='h-5 w-5'>
+                { icon }
+              </div>
+              <p> { title } </p>
+            </button>
           </div>
         ))}
 
