@@ -32,7 +32,7 @@ const Sidebar = () => {
   console.log(session, 'session')
 
   return (
-    <div className='text-gray-500 p-5 text-sm border-r border-gray-900'>
+    <div className='text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen'>
       <div className='space-y-4'>
         {menuOptions.map(({ title, icon }, index) => title != 'Sair' ? (
           <div key={index}>
