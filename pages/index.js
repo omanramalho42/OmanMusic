@@ -1,8 +1,6 @@
-import type { NextPage } from 'next'
-
 import Sidebar from '../components/Sidebar'
 
-const Home: NextPage = () => {
+const Home = () => {
   return (
     <div>
       <main> 
