@@ -9,6 +9,9 @@ import {
 } from '@heroicons/react/outline'
 
 import { signOut, useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+
+import useSpotify from '../hooks/useSpotify'
 
 const Separator = () => {
   return (
@@ -28,8 +31,17 @@ const Sidebar = () => {
     { title: 'Suas músicas', icon: <RssIcon /> },
   ];
   
-  const { data: session, status } = useSession()
-  console.log(session, 'session')
+  const spotifyApi = useSpotify();
+  const { data: session, status } = useSession();
+  const [playlist, setPlaylist] = useState([]);
+
+  useEffect(() => {
+    if(spotifyApi.getAccessToken()) {
+      spotifyApi.getUserPlaylists().then((data) => {
+        setPlaylist(data.body.items);
+      });
+    }
+  },[session, spotifyApi]);
 
   return (
     <div className='text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen'>
@@ -59,10 +71,15 @@ const Sidebar = () => {
             </button>
           </div>
         ))}
-
+        <Separator />
         {/* PLAYLISTS */}
-        {['1','2','3','4','5','6','7','8'].map((i) => (
-          <p key={i} className='cursor-pointer hover:text-white ml-4'> Playlist name... </p>
+        {playlist.map((playlist) => (
+          <p 
+            key={playlist.id} 
+            className='cursor-pointer hover:text-white ml-4'
+          >
+            {playlist.name}
+          </p>
         ))}
       </div>
     </div>
