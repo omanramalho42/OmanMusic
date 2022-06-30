@@ -34,6 +34,9 @@ const Sidebar = () => {
   const spotifyApi = useSpotify();
   const { data: session, status } = useSession();
   const [playlist, setPlaylist] = useState([]);
+  const [playlistId, setPlaylistId] = useState(null);
+
+  console.log("Voce clicou na playlist id: ", playlistId);
 
   useEffect(() => {
     if(spotifyApi.getAccessToken()) {
@@ -75,7 +78,8 @@ const Sidebar = () => {
         {/* PLAYLISTS */}
         {playlist.map((playlist) => (
           <p 
-            key={playlist.id} 
+            key={playlist.id}
+            onClick={() => setPlaylistId(playlist.id)}
             className='cursor-pointer hover:text-white ml-4'
           >
             {playlist.name}
