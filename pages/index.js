@@ -2,14 +2,12 @@ import Sidebar from '../components/Sidebar'
 
 const Home = () => {
   return (
-    <div>
-      <main> 
+    <div className='bg-black h-screen overflow-hidden'>
+      <main className=''> 
         <Sidebar />
         {/* CENTER */}
       </main>
 
-      <h1>Bem vindo ao Oman Music 😁</h1>
-      
       <div>
         {/* PLAYER */}
       </div>
