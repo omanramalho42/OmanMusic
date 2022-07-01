@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { playlistsIdState, playlistAtomState } from '../atoms/playlistAtoms'
+
 import { shuffle } from 'lodash'
 
 import { ChevronDownIcon } from "@heroicons/react/outline"
+import useSpotify from "../hooks/useSpotify"
 
 const Center = () => {
   const { data: session } = useSession();
@@ -19,10 +23,21 @@ const Center = () => {
     "from-orange-500"
   ];
 
+  const spotifyApi = useSpotify();
+
+  const [playlist,setPlaylist] = useRecoilState(playlistAtomState);
+  const playlistId = useRecoilValue(playlistsIdState);
+
   const [color, setColor] = useState(null);
   useEffect(() => {
     setColor(shuffle(colors).pop());
-  },[]);
+  },[playlistId]);
+
+  useEffect(() => {
+    spotifyApi.getPlaylist(playlistId).then((data) => {
+      setPlaylist(data.body);
+    }).catch((error) => console.log("Aconteceu algo inesperado: "+error));
+  },[spotifyApi, playlistId]);
 
   return (
     <div className='flex-grow text-white'>

@@ -11,6 +11,9 @@ import {
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
+import { useRecoilState } from 'recoil'
+import { playlistsIdState } from '../atoms/playlistAtoms'
+
 import useSpotify from '../hooks/useSpotify'
 
 const Separator = () => {
@@ -33,9 +36,9 @@ const Sidebar = () => {
   
   const spotifyApi = useSpotify();
   const { data: session, status } = useSession();
-  const [playlist, setPlaylist] = useState([]);
-  const [playlistId, setPlaylistId] = useState(null);
 
+  const [playlist, setPlaylist] = useState([]);
+  const [playlistId, setPlaylistId] = useRecoilState(playlistsIdState);
   console.log("Voce clicou na playlist id: ", playlistId);
 
   useEffect(() => {
