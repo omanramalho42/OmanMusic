@@ -4,7 +4,9 @@ import {
   PlayIcon,
   ReplyIcon,
   RewindIcon, 
-  SwitchHorizontalIcon 
+  SwitchHorizontalIcon, 
+  VolumeOffIcon, 
+  VolumeUpIcon
 } from "@heroicons/react/outline"
 
 import { useSession } from "next-auth/react"
@@ -68,7 +70,7 @@ const Player = () => {
         />
         <div>
           <h3>{ songInfo?.name }</h3>
-          <p>{ songInfo.artists?.[0]?.name }</p>
+          <p>{ songInfo?.artists?.[0]?.name }</p>
         </div>
       </div>
 
@@ -88,6 +90,18 @@ const Player = () => {
           className="button" 
         />
         <ReplyIcon className="button" />
+      </div>
+
+      <div className="flex items-center space-x-3 md:space-x-4 justify-end">
+        <VolumeOffIcon className="button" />
+        <input 
+          type='range' 
+          value={volume} 
+          min={0} 
+          max={100} 
+          onChange={(vol) => setVolume(vol.target.value)} 
+        />
+        <VolumeUpIcon className="button" /> 
       </div>
     </div>
   );
