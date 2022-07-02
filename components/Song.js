@@ -14,9 +14,8 @@ const Song = ({ order, track }) => {
   const playSong = () => {
     setCurrentTrackId(track.track.id);
     setIsPlaying(true);
-    console.log(track.track.url, 'track url');
     spotifyApi.play({
-      uris: [track.track.url]
+      uris: [track.track.uri],
     });
   };
 
