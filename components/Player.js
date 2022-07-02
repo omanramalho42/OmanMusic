@@ -9,8 +9,10 @@ import {
   VolumeUpIcon
 } from "@heroicons/react/outline"
 
+import { debounce } from 'lodash'
+
 import { useSession } from "next-auth/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { useRecoilState } from "recoil"
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom"
@@ -43,7 +45,7 @@ const Player = () => {
 
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if(data.body.is_playing) {
+      if(data.body?.is_playing) {
         spotifyApi.pause();
         setIsPlaying(false);
       } else {
@@ -58,7 +60,19 @@ const Player = () => {
       fetchCurrentSong();
       setVolume(50);
     }
-  },[currentTrackIdState, spotifyApi, session])
+  },[currentTrackIdState, spotifyApi, session]);
+
+  useEffect(() => {
+    if(volume > 0 && volume < 100) {
+      debouncedAdjustingVolume(volume);
+    }
+  },[volume]);
+
+  const debouncedAdjustingVolume = useCallback(() => {
+    debounce((volume) => {
+      spotifyApi.setVolume(volume).catch(err => console.log(err));
+    }, 500)
+  }, []);
 
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
@@ -93,15 +107,21 @@ const Player = () => {
       </div>
 
       <div className="flex items-center space-x-3 md:space-x-4 justify-end">
-        <VolumeOffIcon className="button" />
+        <VolumeOffIcon 
+          onClick={() => volume > 0 && setVolume(volume - 10)} 
+          className="button"
+        />
         <input 
           type='range' 
-          value={volume} 
-          min={0} 
-          max={100} 
-          onChange={(vol) => setVolume(vol.target.value)} 
+          value={volume}
+          onChange={(vol) => setVolume(Number(vol.target.value))} 
+          min={0}
+          max={100}
         />
-        <VolumeUpIcon className="button" /> 
+        <VolumeUpIcon
+          onClick={() => volume < 100 && setVolume(volume + 10)}
+          className="button" 
+        /> 
       </div>
     </div>
   );
