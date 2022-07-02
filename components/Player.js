@@ -4,10 +4,14 @@ import {
   PlayIcon,
   ReplyIcon,
   RewindIcon, 
-  SwitchHorizontalIcon, 
-  VolumeOffIcon, 
+  SwitchHorizontalIcon,
   VolumeUpIcon
-} from "@heroicons/react/outline"
+} from "@heroicons/react/solid"
+
+import {
+  HeartIcon,
+  VolumeUpIcon as VolumeDownIcon,
+} from '@heroicons/react/outline'
 
 import { debounce } from 'lodash'
 
@@ -86,6 +90,7 @@ const Player = () => {
           <h3>{ songInfo?.name }</h3>
           <p>{ songInfo?.artists?.[0]?.name }</p>
         </div>
+        <HeartIcon className="button" />
       </div>
 
       <div className="flex items-center justify-evenly">
@@ -107,7 +112,7 @@ const Player = () => {
       </div>
 
       <div className="flex items-center space-x-3 md:space-x-4 justify-end">
-        <VolumeOffIcon 
+        <VolumeDownIcon 
           onClick={() => volume > 0 && setVolume(volume - 10)} 
           className="button"
         />
