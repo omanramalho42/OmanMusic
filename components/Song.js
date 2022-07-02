@@ -14,6 +14,7 @@ const Song = ({ order, track }) => {
   const playSong = () => {
     setCurrentTrackId(track.track.id);
     setIsPlaying(true);
+    console.log(track.track.url, 'track url');
     spotifyApi.play({
       uris: [track.track.url]
     });
@@ -22,7 +23,7 @@ const Song = ({ order, track }) => {
   return (
     <div 
       className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer"
-      onClick={playSong()}
+      onClick={() => playSong()}
     >
       <div className="flex items-center space-x-4">
         <p>{ order++ }</p>
